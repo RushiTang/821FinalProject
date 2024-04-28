@@ -1,7 +1,7 @@
 """This is our Dytoria Game."""
 
 import random
-from typing import Dict, List
+from typing import List
 
 
 class NamedObject:
@@ -121,22 +121,15 @@ class Mage(NamedObject):
     def __init__(self, name: str):
         """Initialize with a name and default components."""
         super().__init__(name)
-        self.components: Dict[str, Component] = {
-            "health": HealthComponent(100),
-            "stealth": StealthComponent(50),
-        }
+        self.health: HealthComponent = HealthComponent(100)
+        self.stealth: StealthComponent = StealthComponent(50)
         self.inventory: List[NamedObject] = []
 
     def perform_action(self) -> None:
-        """Print the current action being taken by the mage."""
-        health_component = self.components.get("health")
-        if isinstance(health_component, HealthComponent):
-            print(
-                f"{self.name} is taking action with current health: "
-                f"{health_component.health}"
-            )
-        else:
-            print(f"No health component found for {self.name}.")
+        """Safe access to the health component."""
+        print(
+            f"{self.name} is taking action with current health: {self.health.health}"
+        )
 
 
 class ArcaneChampion(Mage):
@@ -145,8 +138,8 @@ class ArcaneChampion(Mage):
     def __init__(self, name: str, health: int):
         """Initialize with a name and specific health."""
         super().__init__(name)
-        self.components["health"] = HealthComponent(health)
-        self.components["stealth"] = StealthComponent(50)
+        self.health = HealthComponent(health)
+        self.stealth = StealthComponent(50)
         self.hunger = 100
 
     def reduce_hunger(self, amount: int) -> None:
@@ -172,22 +165,137 @@ class ArcaneChampion(Mage):
     def attack(self, target: "Mage", weapon: ArcaneWeapon) -> None:
         """Attack a target with a weapon if conditions are met."""
         if weapon in self.inventory and isinstance(weapon, ArcaneWeapon):
-            stealth_component = self.components.get("stealth")
-            if (
-                isinstance(stealth_component, StealthComponent)
-                and stealth_component.visibility < 30
-            ):
+            if self.stealth.visibility < 30:  # Directly use stealth attribute
                 damage = weapon.damage()
-                health_component = target.components.get("health")
-                if isinstance(health_component, HealthComponent):
-                    health_component.reduce_health(damage)
-                    if health_component.health <= 0:
-                        print(f"{target.get_name()} has been defeated.")
-                else:
-                    print(
-                        f"No health component found for {target.get_name()}."
-                    )
+                target.health.reduce_health(
+                    damage
+                )  # Directly use health attribute of target
+                if target.health.health <= 0:
+                    print(f"{target.get_name()} has been defeated.")
             else:
                 print("Too visible to attack stealthily.")
         else:
             print(f"{weapon.get_name()} not found in inventory.")
+
+
+class Enemy(NamedObject):
+    """Enemy class for combat interaction."""
+
+    def __init__(self, name: str, health: int):
+        """Initialize an enemy."""
+        super().__init__(name)
+        self.health = HealthComponent(health)
+
+
+def create_mage():
+    """Create a mage when the game starts."""
+    name = input("Enter the name of your mage: ")
+    health = int(
+        input(
+            "Enter the starting health of your mage (50-100, recommended 100 for beginners): "
+        )
+    )
+    return ArcaneChampion(name, max(50, min(100, health)))
+
+
+def choose_sanctuary():
+    """Create a sanctury  when the game starts."""
+    sanctuary_name = input(
+        "Enter the name of your sanctuary or press enter to default to 'Mystic Grove': "
+    )
+    return Sanctuary(sanctuary_name if sanctuary_name else "Mystic Grove")
+
+
+def find_item():
+    """Explore in the game."""
+    items = [
+        SpellcasterBow("Mystic Bow", 15, 25),
+        MysticQuiver("Basic Arrows", 20),
+    ]
+    found_item = random.choice(items)
+    print(f"You found a {found_item.get_name()}!")
+    return found_item
+
+
+def create_enemy():
+    """Randomly creates an enemy."""
+    enemies = [Enemy("Goblin", 50), Enemy("Orc", 80)]
+    return random.choice(enemies)
+
+
+def display_enemies(enemies):
+    """Displays a list of enemies."""
+    for i, enemy in enumerate(enemies, 1):
+        print(f"{i}. {enemy.get_name()} - Health: {enemy.health.health}")
+
+
+def initiate_attack(champion, enemies):
+    """Initiates an attack sequence."""
+    print("Choose an enemy to attack:")
+    display_enemies(enemies)
+    choice = int(input("Select an enemy (number): ")) - 1
+    enemy = enemies[choice]
+    weapon = champion.inventory[
+        0
+    ]  # Simplified: using the first weapon in the inventory
+    if attack_target(champion, enemy, weapon):
+        enemies.remove(enemy)  # Remove defeated enemy
+
+
+def attack_target(player, enemy, weapon):
+    """Handles the attack mechanics."""
+    if weapon in player.inventory:
+        print(f"Attacking {enemy.get_name()} with {weapon.get_name()}...")
+        damage = weapon.damage()
+        enemy.health.reduce_health(damage)
+        print(
+            f"Dealt {damage} damage to {enemy.get_name()}. Remaining health: {enemy.health.health}"
+        )
+        if enemy.health.health <= 0:
+            print(f"{enemy.get_name()} has been defeated!")
+            return True
+    else:
+        print("You do not have that weapon in your inventory.")
+    return False
+
+
+def play_game():
+    """Start and play the game."""
+    print("Welcome to Dystoria: Shadows of Magic!")
+    champion = create_mage()
+    sanctuary = choose_sanctuary()
+    sanctuary.add_mage(champion)
+
+    # Starting inventory
+    bow = SpellcasterBow("Starter Bow", 10, 20)
+    champion.inventory.append(bow)
+    print(f"Starting with {bow.get_name()} in your inventory.")
+
+    # List of enemies
+    enemies = [create_enemy() for _ in range(3)]
+
+    actions = {
+        "explore": lambda: champion.inventory.append(find_item()),
+        "inventory": lambda: ", ".join(
+            [item.get_name() for item in champion.inventory]
+        ),
+        "status": lambda: f"Health: {champion.health.health}, Stealth: {champion.stealth.visibility}, Hunger: {champion.hunger}",
+        "attack": lambda: initiate_attack(champion, enemies),
+    }
+
+    while True:
+        command = input(
+            "Enter a command (explore, attack, inventory, status, exit): "
+        ).lower()
+
+        if command == "exit":
+            print("Exiting the game. Goodbye!")
+            break
+        elif command in actions:
+            result = actions[command]()
+            print(result() if callable(result) else result)
+        else:
+            print("Unknown command. Try again.")
+
+
+play_game()
