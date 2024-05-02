@@ -220,8 +220,8 @@ class ArcaneChampion(Mage):
             print(
                 f"Moved behind a rock but almost hit by the enemy! "
                 f"Current visibility: {self.stealth.visibility}, "
-                f"Health: {self.health.health}"
-                f"You've found a good attacking angle behind the rock!"
+                f"Health: {self.health.health}. "
+                f"You've found a good attacking angle behind the rock! "
                 f"Damage enhanced by 50%."
             )
         elif tactic == "2":
@@ -237,7 +237,7 @@ class ArcaneChampion(Mage):
             self.damage_multiplier = 1.05
             print(
                 f"Hidden in grass. "
-                f"Current visibility: {self.stealth.visibility}"
+                f"Current visibility: {self.stealth.visibility}, "
                 f"Damage enhanced by 5%."
             )
         else:
