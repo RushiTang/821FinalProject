@@ -25,7 +25,7 @@ Welcome to Dytoria, a mystical realm where magic and stealth govern the balance 
 - **Weapons and Combat:** Engage in battles by using weapons. Calculate damage based on the weapon's damage range and your current stealth level.
 - **Resource Management:** Keep an eye on your inventory and manage resources such as arrows in your Mystic Quiver.
 
-#### Playing as a Mage
+#### Playing as a Hero
 1. **Initiate with Basic Setup:** Start with predefined health and stealth levels.
 2. **Perform Actions:** Take actions based on your strategic decisions, managing health and stealth to optimize survival and attack capabilities.
 
@@ -36,7 +36,6 @@ Welcome to Dytoria, a mystical realm where magic and stealth govern the balance 
 The objective is to navigate through sanctuaries, strategically managing health, stealth, and resources to outlast and defeat other players or enemies. Form alliances or tactically use the game's mechanics to gain advantages.
 
 ### Sample Interactive session
-Yixuans-MacBook-Air:821FinalProject yixuan$ python src/Dystoria.py
 Welcome to Mystic Forest!
 Your health: 200
 Available actions:
