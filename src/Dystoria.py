@@ -390,37 +390,53 @@ class Game:
 
     def select_equipment(self) -> None:
         """Allow the player to select equipment from the current sanctuary."""
-        print("Select your Bow:")
-        for idx, bow in enumerate(self.current_sanctuary.bows):
-            print(f"{idx + 1}. {bow.get_name()}")
+        # Selection of bows
+        while True:
+            print("Select your Bow:")
+            for idx, bow in enumerate(self.current_sanctuary.bows):
+                print(f"{idx + 1}. {bow.get_name()}")
 
-        bow_choice = int(input("Enter the number for your choice: ")) - 1
-        if 0 <= bow_choice < len(self.current_sanctuary.bows):
-            self.player.inventory.append(
-                self.current_sanctuary.bows[bow_choice]
-            )
-            print(
-                f"You have selected the "
-                f"{self.current_sanctuary.bows[bow_choice].get_name()}."
-            )
-        else:
-            print("Invalid choice.")
+            try:
+                bow_choice = int(input("Enter the number for your choice: "))
+                if 0 < bow_choice <= len(self.current_sanctuary.bows):
+                    bow_choice -= 1  # Convert to zero-index
+                    self.player.inventory.append(
+                        self.current_sanctuary.bows[bow_choice]
+                    )
+                    print(
+                        f"You have selected the "
+                        f"{self.current_sanctuary.bows[bow_choice].get_name()}."
+                    )
+                    break  # Exit the loop if choice is valid
+                else:
+                    print("Invalid choice, please select a valid number.")
+            except ValueError:
+                print("Incompatible type, please enter a valid integer.")
 
-        print("Select your Quiver:")
-        for idx, quiver in enumerate(self.current_sanctuary.quivers):
-            print(f"{idx + 1}. {quiver.get_name()}")
+        # Selection of quivers
+        while True:
+            print("Select your Quiver:")
+            for idx, quiver in enumerate(self.current_sanctuary.quivers):
+                print(f"{idx + 1}. {quiver.get_name()}")
 
-        quiver_choice = int(input("Enter the number for your choice: ")) - 1
-        if 0 <= quiver_choice < len(self.current_sanctuary.quivers):
-            self.player.inventory.append(
-                self.current_sanctuary.quivers[quiver_choice]
-            )
-            print(
-                f"You have selected the "
-                f"{self.current_sanctuary.quivers[quiver_choice].get_name()}."
-            )
-        else:
-            print("Invalid choice.")
+            try:
+                quiver_choice = int(
+                    input("Enter the number for your choice: ")
+                )
+                if 0 < quiver_choice <= len(self.current_sanctuary.quivers):
+                    quiver_choice -= 1  # Convert to zero-index
+                    self.player.inventory.append(
+                        self.current_sanctuary.quivers[quiver_choice]
+                    )
+                    print(
+                        f"You have selected the "
+                        f"{self.current_sanctuary.quivers[quiver_choice].get_name()}."
+                    )
+                    break  # Exit the loop if choice is valid
+                else:
+                    print("Invalid choice, please select a valid number.")
+            except ValueError:
+                print("Incompatible type, please enter a valid integer.")
 
 
 # Example of starting the game

@@ -29,5 +29,38 @@ Start by creating your character, choosing from a Mage or an Arcane Champion. Ea
 ### Winning the Game
 The objective is to outlast and defeat other players through strategic management of health, stealth, and resources. Forming alliances and tactically using sanctuaries can provide strategic advantages against other players.
 
+### Sample Interactive session
+Welcome to Dystoria: Shadows of Magic!
+Enter the name of your mage: Merlin
+Enter the starting health of your mage (50-100, recommended 100 for beginners): 100
+Enter the name of your sanctuary or press enter to default to 'Mystic Grove': 
+Starting with Starter Bow in your inventory.
+
+Available commands: explore, attack, inventory, status, exit
+Enter a command (explore, attack, inventory, status, exit): status
+Health: 100, Stealth: 50, Hunger: 100
+
+Enter a command (explore, attack, inventory, status, exit): explore
+You found a Mystic Quiver!
+Added Mystic Quiver to your inventory.
+
+Enter a command (explore, attack, inventory, status, exit): inventory
+Starter Bow, Mystic Quiver
+
+Enter a command (explore, attack, inventory, status, exit): attack
+Choose an enemy to attack:
+1. Goblin - Health: 50
+2. Orc - Health: 80
+Select an enemy (number): 1
+Attacking Goblin with Starter Bow...
+Dealt 18 damage to Goblin. Remaining health: 32
+
+Enter a command (explore, attack, inventory, status, exit): status
+Health: 100, Stealth: 50, Hunger: 100
+
+Enter a command (explore, attack, inventory, status, exit): exit
+Exiting the game. Goodbye!
+
+
 ## Conclusion
 Dytoria offers a complex world of magical battles and strategic resource management, perfect for players who enjoy deep, engaging gameplay intertwined with fantasy elements. Whether you're sneaking through the shadows or launching a full-scale magical assault, Dytoria promises thrilling adventures and intense tactical battles.
